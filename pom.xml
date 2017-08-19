@@ -1,36 +1,65 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.rozzer.quest</groupId>
-    <artifactId>adventureQuestWorld</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>com.netcracker.mockingbird</groupId>
+    <artifactId>aggregator</artifactId>
+    <version>4.2.5-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>aggregator</name>
+
+    <modules>
+        <module>build-tools</module>
+        <module>parent/parent-dependencies</module>
+        <module>parent/parent-java</module>
+        <module>mockingbird-core</module>
+        <module>mockingbird-report-execution</module>
+        <module>mockingbird-configuration-common</module>
+        <module>mockingbird-configuration-provider</module>
+        <module>mockingbird-configuration-hibernate</module>
+        <module>mockingbird-service-ui</module>
+        <module>mockingbird-report-atp</module>
+        <module>mockingbird-report-file</module>
+        <module>mockingbird-report-svt</module>
+        <module>mockingbird-template-velocity</module>
+        <module>mockingbird-template-simple</module>
+        <module>mockingbird-transports-camel</module>
+        <module>mockingbird-integration-atp</module>
+        <module>mockingbird-ci-temp</module>
+        <module>mockingbird-release-management</module>
+        <module>mockingbird-remote-api</module>
+        <module>mockingbird-postbird</module>
+        <module>mockingbird-libraries-holder</module>
+        <module>mockingbird-core-transports</module>
+        <module>mockingbird-core-utils</module>
+        <module>mockingbird-converter</module>
+        <module>mockingbird-integration-bv</module>
+        <module>mockingbird-transports-df</module>
+        <module>mockingbird-lb-migration</module>
+        <module>mockingbird-interceptors</module>
+        <module>common</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+    <scm>
+        <connection>scm:svn:https://svn.netcracker.com/mockingbird/trunk</connection>
+        <developerConnection>scm:svn:https://svn.netcracker.com/mockingbird/trunk</developerConnection>
+        <url>https://svn.netcracker.com/mockingbird/trunk</url>
+    </scm>
+
     <build>
-        <finalName>adventureQuestWorld</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.15</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>com.rozzer.quest.menu.Main</mainClass>
-                        </manifest>
-                    </archive>
+                    <argLine>-Dfile.encoding=UTF-8</argLine>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
-
 </project>
