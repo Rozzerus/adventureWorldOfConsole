@@ -9,10 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>awoi-ui</artifactId>
+    <artifactId>awoi-controller</artifactId>
 
     <build>
-        <finalName>awoi-ui</finalName>
+        <finalName>awoi-controller</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
