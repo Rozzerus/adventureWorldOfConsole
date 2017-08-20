@@ -28,7 +28,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.rozzer.quest.menu.Main</mainClass>
+                            <mainClass>com.rozzer.adventure.menu.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
