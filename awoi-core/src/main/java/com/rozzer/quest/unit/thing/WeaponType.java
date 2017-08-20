@@ -2,8 +2,6 @@ package com.rozzer.quest.unit.thing;
 
 import com.rozzer.quest.core.Constants;
 
-import java.util.Random;
-
 /**
  * Created by Rozzer on 15.11.2016.
  */

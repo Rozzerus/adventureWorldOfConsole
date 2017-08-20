@@ -1,1 +1,1 @@
-java -jar ./bin/awoc-core.jar -Dfile.encoding=UTF-8
+java -jar ./bin/awoi-core.jar -Dfile.encoding=UTF-8

@@ -3,9 +3,9 @@ package com.rozzer.quest.unit.enemy;
 import com.rozzer.quest.core.Constants;
 import com.rozzer.quest.unit.RaceType;
 import com.rozzer.quest.unit.Unit;
-import com.rozzer.quest.unit.enemy.type.OgreEnemy;
 import com.rozzer.quest.unit.enemy.type.ElfEnemy;
 import com.rozzer.quest.unit.enemy.type.HumanEnemy;
+import com.rozzer.quest.unit.enemy.type.OgreEnemy;
 import com.rozzer.quest.unit.enemy.type.OrcEnemy;
 import com.rozzer.quest.unit.thing.WeaponType;
 

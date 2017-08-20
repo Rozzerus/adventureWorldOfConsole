@@ -5,8 +5,6 @@ import com.rozzer.quest.core.Depiction;
 import com.rozzer.quest.core.Speaker;
 import com.rozzer.quest.unit.thing.WeaponType;
 
-import java.util.Random;
-
 /**
  * Created by Rozzer on 16.11.2016.
  */

@@ -23,6 +23,6 @@ hs_err_pid*
 /.idea/
 /target/
 *.iml
-/awoc-ui/target/
-/awoc-core/target/
+/awoi-ui/target/
+/awoi-core/target/
 /build/target/

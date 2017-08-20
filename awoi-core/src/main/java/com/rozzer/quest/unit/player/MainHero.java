@@ -1,6 +1,5 @@
 package com.rozzer.quest.unit.player;
 
-import com.rozzer.quest.core.Constants;
 import com.rozzer.quest.core.Depiction;
 import com.rozzer.quest.core.Speaker;
 import com.rozzer.quest.unit.AbstractUnit;

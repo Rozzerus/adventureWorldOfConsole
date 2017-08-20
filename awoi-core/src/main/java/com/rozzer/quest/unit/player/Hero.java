@@ -1,8 +1,6 @@
 package com.rozzer.quest.unit.player;
 
-import com.rozzer.quest.unit.RaceType;
 import com.rozzer.quest.world.AbstractSite;
-import com.rozzer.quest.world.Site;
 
 /**
  * Created by Rozzer on 15.11.2016.
