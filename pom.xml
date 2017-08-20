@@ -11,6 +11,8 @@
         <module>awoi-core</module>
         <module>awoi-controller</module>
         <module>build</module>
+        <module>awoi-console</module>
+        <module>awoi-entities</module>
     </modules>
 
     <properties>

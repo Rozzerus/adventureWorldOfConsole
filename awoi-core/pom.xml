@@ -28,12 +28,20 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.rozzer.adventure.menu.Main</mainClass>
+                            <mainClass>com.rozzer.adventure.main.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.rozzer.awoi</groupId>
+            <artifactId>awoi-entities</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+    </dependencies>
 
 </project>

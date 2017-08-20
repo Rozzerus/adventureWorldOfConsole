@@ -25,4 +25,18 @@
         </plugins>
     </build>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.rozzer.awoi</groupId>
+            <artifactId>awoi-core</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+    </dependencies>
+
+
 </project>
