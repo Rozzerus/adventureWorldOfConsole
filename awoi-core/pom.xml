@@ -10,6 +10,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>awoi-core</artifactId>
+    <build>
+        <finalName>awoi-core</finalName>
+    </build>
 
 
 </project>
