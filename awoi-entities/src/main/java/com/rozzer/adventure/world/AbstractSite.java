@@ -1,6 +1,9 @@
 package com.rozzer.adventure.world;
 
-import com.rozzer.adventure.unit.Unit;
+import com.rozzer.adventure.core.Constants;
+import com.rozzer.adventure.core.Depiction;
+import com.rozzer.adventure.core.Site;
+import com.rozzer.adventure.core.Unit;
 import com.rozzer.adventure.unit.npc.enemy.AbstractEnemy;
 import com.rozzer.adventure.unit.npc.enemy.EnemiesFactory;
 
@@ -9,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Created by Rozzer on 16.11.2016.
  */
-public abstract class AbstractSite implements Constants {
+public abstract class AbstractSite implements Constants, Site {
     private String description;
     private ArrayList<Unit> unitSet = new ArrayList<>();
     private int x;
@@ -94,19 +97,19 @@ public abstract class AbstractSite implements Constants {
     }
 
     public AbstractSite getNorthSite() {
-        return World.getWorld().getSiteByCoordinate(this.x,this.y+1);
+        return WorldImpl.getWorld().getSiteByCoordinate(this.x,this.y+1);
     }
 
     public AbstractSite getSouthSite() {
-        return World.getWorld().getSiteByCoordinate(this.x,this.y-1);
+        return WorldImpl.getWorld().getSiteByCoordinate(this.x,this.y-1);
     }
 
     public AbstractSite getWestSite() {
-        return World.getWorld().getSiteByCoordinate(this.x-1,this.y);
+        return WorldImpl.getWorld().getSiteByCoordinate(this.x-1,this.y);
     }
 
     public AbstractSite getEastSite() {
-        return World.getWorld().getSiteByCoordinate(this.x+1,this.y);
+        return WorldImpl.getWorld().getSiteByCoordinate(this.x+1,this.y);
     }
 
 }

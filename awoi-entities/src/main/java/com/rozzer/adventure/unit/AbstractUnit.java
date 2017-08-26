@@ -1,9 +1,7 @@
 package com.rozzer.adventure.unit;
 
-import com.rozzer.adventure.core.Constants;
-import com.rozzer.adventure.core.Depiction;
-import com.rozzer.adventure.core.Speaker;
-import com.rozzer.adventure.unit.thing.WeaponType;
+
+import com.rozzer.adventure.core.*;
 
 /**
  * Created by Rozzer on 16.11.2016.
@@ -17,6 +15,11 @@ public abstract class AbstractUnit implements Unit, Constants {
     private String description;
     private int attackBonus = STANDART_BONUS;
     private int defenseBonus = STANDART_BONUS;
+    private final GameEngine gameEngine;
+
+    protected AbstractUnit(GameEngine gameEngine) {
+        this.gameEngine = gameEngine;
+    }
 
     @Override
     public String getDescription() {
@@ -80,7 +83,7 @@ public abstract class AbstractUnit implements Unit, Constants {
 
     @Override
     public void die()  {
-        Speaker.getSpeaker().say(String.format(Depiction.DIES,description));
+        gameEngine.unitDies(this);
         this.isLive = false;
     }
 
@@ -96,7 +99,7 @@ public abstract class AbstractUnit implements Unit, Constants {
         }
         attack = attack * this.attackBonus;
         this.attackBonus = STANDART_BONUS;
-        Speaker.getSpeaker().say(String.format(Depiction.FORCE_ATTACK,description,attack));
+        gameEngine.unitAttack(this, attack);
         return attack;
     }
 
@@ -108,11 +111,11 @@ public abstract class AbstractUnit implements Unit, Constants {
         defense = defense * this.defenseBonus;
         this.defenseBonus = STANDART_BONUS;
         if (RANDOM.nextInt(RATE_DEFENSE) > defense){
-            Speaker.getSpeaker().say(String.format(Depiction.DEFENSE_FAIL,description,damage,this.health-damage));
+            gameEngine.unitDefense(this, defense, damage, false);
             this.removeHealth(damage);
             return false;
         }
-        Speaker.getSpeaker().say(String.format(Depiction.DEFENSE_SUCCESS, description, damage));
+        gameEngine.unitDefense(this, defense, damage, true);
         return true;
     }
 
@@ -120,10 +123,10 @@ public abstract class AbstractUnit implements Unit, Constants {
     public boolean run() {
         int run = (int) (this.getRace().getGuile() * (this.getRace().getAgility() * FACTOR_DEFENSE_AGILITY));
         if (RANDOM.nextInt(RATE_DEFENSE) > run){
-            Speaker.getSpeaker().say(String.format(Depiction.RUN_FAIL, description));
+            gameEngine.unitRun(this, false);
             return false;
         }
-        Speaker.getSpeaker().say(String.format(Depiction.RUN_SUCCESS, description));
+        gameEngine.unitRun(this, true);
         return true;
     }
 

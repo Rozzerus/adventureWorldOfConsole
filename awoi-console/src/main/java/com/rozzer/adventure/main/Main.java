@@ -1,14 +1,18 @@
 package com.rozzer.adventure.main;
 
+import com.rozzer.adventure.Speaker;
+import com.rozzer.adventure.core.World;
+import com.rozzer.adventure.core.exception.EndGame;
+import com.rozzer.adventure.unit.hero.MainHero;
+
 /**
  * Created by Rozzer on 15.11.2016.
  */
 public class Main {
     public static void main(String[] args) {
-/*        ClassLoader.getSystemClassLoader().loadClass()
-        Interaction speaker = new Interaction().init().getSpeaker();
-        MainHero hero = Player.getPlayer().getPlayerHero();
-        World world = World.getWorld();
+        Speaker speaker = new Speaker();
+        MainHero hero = (MainHero) speaker.getPlayer().getPlayerHero();
+        World world = speaker.getWorld();
 
         try {
             speaker.startGame();
@@ -22,7 +26,7 @@ public class Main {
 
         } catch (EndGame endGame) {
             speaker.gameOver();
-        }*/
+        }
 
     }
 }

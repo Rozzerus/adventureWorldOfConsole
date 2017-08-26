@@ -1,30 +1,38 @@
 package com.rozzer.adventure.unit.hero;
 
-import com.rozzer.adventure.core.Depiction;
-import com.rozzer.adventure.core.Speaker;
+import com.rozzer.adventure.core.Constants;
+import com.rozzer.adventure.core.GameEngine;
+import com.rozzer.adventure.core.Hero;
+import com.rozzer.adventure.core.Site;
 import com.rozzer.adventure.unit.AbstractUnit;
-import com.rozzer.adventure.world.AbstractSite;
+import com.rozzer.adventure.world.WorldImpl;
+
 
 /**
  * Created by Rozzer on 15.11.2016.
  */
-public class MainHero extends AbstractUnit implements Hero {
+public class MainHero extends AbstractUnit implements Hero, Constants {
 
     private String name;
     private boolean isFirstFight = true;
-    private AbstractSite currentSite;
+    private Site currentSite;
+    private final GameEngine gameEngine;
 
-    public MainHero() {
+    public MainHero(GameEngine gameEngine) {
+        super(gameEngine);
+        //FIXME it's hack.
+        WorldImpl.getWorld().setGameEngine(gameEngine);
+        this.gameEngine = gameEngine;
         setHealth(HEALTH_HERO);
     }
 
     @Override
-    public AbstractSite getCurrentSite() {
+    public Site getCurrentSite() {
         return this.currentSite;
     }
 
     @Override
-    public void setCurrentSite(AbstractSite site) {
+    public void setCurrentSite(Site site) {
         this.currentSite = site;
     }
 
@@ -73,6 +81,6 @@ public class MainHero extends AbstractUnit implements Hero {
     @Override
     public void die() {
         super.die();
-        Speaker.getSpeaker().say(String.format(Depiction.HERO_FAIL,this.name));
+        gameEngine.heroDies(this);
     }
 }

@@ -1,35 +1,31 @@
 package com.rozzer.adventure;
 
 
+import com.rozzer.adventure.core.*;
 import com.rozzer.adventure.core.exception.EndGame;
+import com.rozzer.adventure.core.exception.NoPlayerException;
 import com.rozzer.adventure.core.option.Option;
 import com.rozzer.adventure.core.option.OptionEnemy;
 import com.rozzer.adventure.core.option.OptionFight;
 import com.rozzer.adventure.core.option.OptionTravel;
-import com.rozzer.adventure.unit.RaceType;
-import com.rozzer.adventure.unit.thing.WeaponType;
-import com.rozzer.adventure.world.Depiction;
 
 
 /**
  * Created by Rozzer on 15.11.2016.
  */
-public class Speaker implements Depiction, Constants {
-    private static Speaker speaker;
+public class Speaker extends AbstractGameEngine implements Depiction, Constants {
 
-    private Speaker() {
-    }
-    public static Speaker getSpeaker(){
-        if (speaker == null) {
-            speaker = new Speaker();
-        }
-        return speaker;
+    private final  Player player;
+
+    public Speaker() {
+        player = new PlayerImpl(this);
     }
 
+    @Override
     public  void startGame() throws EndGame{
         say(MENU);
         while (true) {
-            String playerCommand = Player.getPlayer().answer();
+            String playerCommand = getPlayer().answer();
             if (validMessage(playerCommand) && (Option.START.toString().equals(playerCommand))) {
                 break;
             } else {
@@ -38,13 +34,52 @@ public class Speaker implements Depiction, Constants {
         }
     }
 
+    @Override
+    public Player getPlayer() throws NoPlayerException {
+        return player;
+    }
+
+    @Override
+    public void heroDies(Hero hero) throws NoPlayerException {
+        say(String.format(Depiction.HERO_FAIL,getPlayer().getPlayerHero().getName()));
+    }
+
+    @Override
+    public void unitDies(Unit unit) {
+        say(String.format(Depiction.DIES,unit.getDescription()));
+    }
+
+
+    @Override
+    public void unitAttack(Unit unit, int attack) {
+        say(String.format(Depiction.FORCE_ATTACK,unit.getDescription(),attack));
+    }
+
+    @Override
+    public void unitDefense(Unit unit, int defense, int damage, boolean isSuccess) {
+        if (isSuccess){
+            say(String.format(Depiction.DEFENSE_SUCCESS, unit.getDescription(), damage));
+            return;
+        }
+        say(String.format(Depiction.DEFENSE_FAIL,unit.getDescription(),damage,unit.getHealth()-damage));
+    }
+
+    @Override
+    public void unitRun(Unit unit, boolean isSuccess) {
+        if (isSuccess){
+            say(String.format(Depiction.RUN_SUCCESS, unit.getDescription()));
+            return;
+        }
+        say(String.format(Depiction.RUN_FAIL, unit.getDescription()));
+    }
+
     public void greeting() throws EndGame{
         say(GREETING);
         while (true) {
-            String playerCommand = Player.getPlayer().answer();
+            String playerCommand = getPlayer().answer();
             if (validMessage(playerCommand)) {
-                Player.getPlayer().getPlayerHero().setName(playerCommand);
-                excellent(Player.getPlayer().getPlayerHero().getName());
+                getPlayer().getPlayerHero().setName(playerCommand);
+                excellent(getPlayer().getPlayerHero().getName());
                 break;
             } else {
                 error();
@@ -54,14 +89,14 @@ public class Speaker implements Depiction, Constants {
     public void askRace() throws EndGame {
         say(WHAT_RACE_YOU);
         while (true) {
-            String playerCommand = Player.getPlayer().answer();
+            String playerCommand = getPlayer().answer();
             if (validMessage(playerCommand) && (RaceType.validString(playerCommand)) && (!RaceType.fromString(playerCommand).isBoss())) {
-                Player.getPlayer().getPlayerHero().setRace(RaceType.fromString(playerCommand));
-                Player.getPlayer().getPlayerHero().setWeapon(WeaponType.getRandom());
+                getPlayer().getPlayerHero().setRace(RaceType.fromString(playerCommand));
+                getPlayer().getPlayerHero().setWeapon(WeaponType.getRandom());
                 String description = String.format(RACE_AND_NAME,
-                        Player.getPlayer().getPlayerHero().getRace().toString(),
-                        Player.getPlayer().getPlayerHero().getName());
-                Player.getPlayer().getPlayerHero().setDescription(description);
+                        getPlayer().getPlayerHero().getRace().toString(),
+                        getPlayer().getPlayerHero().getName());
+                getPlayer().getPlayerHero().setDescription(description);
                 excellent(description);
                 break;
             } else {
@@ -74,16 +109,16 @@ public class Speaker implements Depiction, Constants {
     public void launchPlayerInWorld() throws EndGame{
         say(String.format(LAUNCH_PLAYER_IN_WORLD,
                                         String.format(RACE_AND_NAME,
-                                                    Player.getPlayer().getPlayerHero().getRace().toString(),
-                                                    Player.getPlayer().getPlayerHero().getName()),
-                                        Player.getPlayer().getPlayerHero().getWeapon().toString(),
-                                        Player.getPlayer().getPlayerHero().getCurrentSite().getDescription()
+                                                    getPlayer().getPlayerHero().getRace().toString(),
+                                                    getPlayer().getPlayerHero().getName()),
+                                        getPlayer().getPlayerHero().getWeapon().toString(),
+                                        getPlayer().getPlayerHero().getCurrentSite().getDescription()
                                         ));
         go();
     }
 
     public void whereToGo() throws EndGame {
-        if (Player.getPlayer().getPlayerHero().isLive()) {
+        if (getPlayer().getPlayerHero().isLive()) {
             say(WHERE_TO_GO);
             go();
         } else {
@@ -104,13 +139,13 @@ public class Speaker implements Depiction, Constants {
     }
 
     private void whatToDoWithTheEnemy() throws EndGame{
-        if (Player.getPlayer().getPlayerHero().isFirstFight()){
+        if (getPlayer().getPlayerHero().isFirstFight()){
             say(String.format(WHAT_TO_WITH_THE_ENEMY_LONG,WHAT_TO_WITH_THE_ENEMY_MINI));
         } else {
             say(WHAT_TO_WITH_THE_ENEMY_MINI);
         }
         while (true) {
-            String playerCommand = Player.getPlayer().answer();
+            String playerCommand = getPlayer().answer();
             if (validMessage(playerCommand) && (OptionEnemy.validString(playerCommand))) {
                 if (playerCommand.equalsIgnoreCase(OptionEnemy.ATTACK.toString())) {
                     playerAttack();
@@ -133,30 +168,30 @@ public class Speaker implements Depiction, Constants {
     }
 
     private void whatToDoWithTheBossEnemy() throws EndGame {
-        say(String.format(YUO_SEE_AND_ATTACK,Player.getPlayer().getPlayerHero().getCurrentSite().getRandomEnemy().getDescription()));
+        say(String.format(YUO_SEE_AND_ATTACK, getPlayer().getPlayerHero().getCurrentSite().getRandomEnemy().getDescription()));
         fight();
-        if (Player.getPlayer().getPlayerHero().isLive()){
-            Player.getPlayer().getPlayerHero().addHealth(HEALING_HERO_AFTER_VICTORY);
+        if (getPlayer().getPlayerHero().isLive()){
+            getPlayer().getPlayerHero().addHealth(HEALING_HERO_AFTER_VICTORY);
             say(HERO_VICTORY);
         }
     }
 
     private void playerAttack() throws EndGame{
-        if (Player.getPlayer().getPlayerHero().isFirstFight()){
+        if (getPlayer().getPlayerHero().isFirstFight()){
             say(String.format(START_FIGHT_LONG,START_FIGHT_MINI));
         } else {
             say(START_FIGHT_MINI);
         }
         say(YOU_DRAW_FIRST_HIT);
-        if (Player.getPlayer().getPlayerHero().getCurrentSite().getRandomEnemy() != null) {
-            Player.getPlayer().getPlayerHero().getCurrentSite().getRandomEnemy().defense(Player.getPlayer().getPlayerHero().attack());
+        if (getPlayer().getPlayerHero().getCurrentSite().getRandomEnemy() != null) {
+            getPlayer().getPlayerHero().getCurrentSite().getRandomEnemy().defense(getPlayer().getPlayerHero().attack());
             fight();
         }
     }
 
     private void playerSlip() throws EndGame{
         say(YOU_SLIP);
-        if (Player.getPlayer().getPlayerHero().slip()) {
+        if (getPlayer().getPlayerHero().slip()) {
             say(SLIP_SUCCESS);
         } else {
             say(SLIP_FAIL);
@@ -166,7 +201,7 @@ public class Speaker implements Depiction, Constants {
 
     private void playerTalk() throws EndGame{
         say(YOU_TALK);
-        if (Player.getPlayer().getPlayerHero().talk()) {
+        if (getPlayer().getPlayerHero().talk()) {
             say(TALK_SUCCESS);
         } else {
             say(TALK_FAIL);
@@ -176,11 +211,11 @@ public class Speaker implements Depiction, Constants {
 
     private void playerGo() throws EndGame{
         say(GET_AWAY_FROM_ENEMY);
-        if (Player.getPlayer().getPlayerHero().go()) {
+        if (getPlayer().getPlayerHero().go()) {
             say(GET_AWAY_FROM_ENEMY_SUCCESS);
         } else {
             say(GET_AWAY_FROM_ENEMY_FAIL);
-            Player.getPlayer().getPlayerHero().die();
+            getPlayer().getPlayerHero().die();
         }
     }
 
@@ -188,25 +223,25 @@ public class Speaker implements Depiction, Constants {
         boolean mobAttack = true;
         boolean fightNotEnd = true;
         while (fightNotEnd &&
-                Player.getPlayer().getPlayerHero().getCurrentSite().isHaveLiveEnemy() &&
-                Player.getPlayer().getPlayerHero().isLive()){
+                getPlayer().getPlayerHero().getCurrentSite().isHaveLiveEnemy() &&
+                getPlayer().getPlayerHero().isLive()){
             if (mobAttack){
-                Player.getPlayer().getPlayerHero().defense(Player.getPlayer().getPlayerHero().getCurrentSite().getRandomEnemy().attack());
+                getPlayer().getPlayerHero().defense(getPlayer().getPlayerHero().getCurrentSite().getRandomEnemy().attack());
                 mobAttack = false;
             } else {
                 while (true) {
-                    String playerCommand = Player.getPlayer().answer();
+                    String playerCommand = getPlayer().answer();
                     if (validMessage(playerCommand) && (OptionFight.validString(playerCommand))) {
                         if (playerCommand.equalsIgnoreCase(OptionFight.HIT.toString())){
-                            Player.getPlayer().getPlayerHero().getCurrentSite().getRandomEnemy().defense(Player.getPlayer().getPlayerHero().attack());
+                            getPlayer().getPlayerHero().getCurrentSite().getRandomEnemy().defense(getPlayer().getPlayerHero().attack());
                             break;
                         } else if (playerCommand.equalsIgnoreCase(OptionFight.SMASH.toString())) {
-                            Player.getPlayer().getPlayerHero().getCurrentSite().getRandomEnemy().setDefenseBonus(RANDOM_BONUS[RANDOM.nextInt(RANDOM_BONUS.length)]); // FIXME: 17.11.2016
-                            Player.getPlayer().getPlayerHero().setAttackBonus(RANDOM_BONUS[RANDOM.nextInt(RANDOM_BONUS.length)]);
-                            Player.getPlayer().getPlayerHero().getCurrentSite().getRandomEnemy().defense(Player.getPlayer().getPlayerHero().attack());
+                            getPlayer().getPlayerHero().getCurrentSite().getRandomEnemy().setDefenseBonus(RANDOM_BONUS[RANDOM.nextInt(RANDOM_BONUS.length)]); // FIXME: 17.11.2016
+                            getPlayer().getPlayerHero().setAttackBonus(RANDOM_BONUS[RANDOM.nextInt(RANDOM_BONUS.length)]);
+                            getPlayer().getPlayerHero().getCurrentSite().getRandomEnemy().defense(getPlayer().getPlayerHero().attack());
                             break;
                         } else if (playerCommand.equalsIgnoreCase(OptionFight.RUN.toString())){
-                            fightNotEnd = !Player.getPlayer().getPlayerHero().run();
+                            fightNotEnd = !getPlayer().getPlayerHero().run();
                             break;
                         }
                     } else {
@@ -217,9 +252,9 @@ public class Speaker implements Depiction, Constants {
             }
 
         }
-        if (Player.getPlayer().getPlayerHero().isLive()){
+        if (getPlayer().getPlayerHero().isLive()){
             say(FIGHT_SUCCESS);
-            Player.getPlayer().getPlayerHero().addHealth(HEALING_HERO_AFTER_VICTORY);
+            getPlayer().getPlayerHero().addHealth(HEALING_HERO_AFTER_VICTORY);
             say(String.format(HERO_HEALING,HEALING_HERO_AFTER_VICTORY));
         }
 
@@ -227,23 +262,23 @@ public class Speaker implements Depiction, Constants {
 
     private void go() throws EndGame{
         while (true) {
-            String playerCommand = Player.getPlayer().answer();
+            String playerCommand = getPlayer().answer();
             if (validMessage(playerCommand) && (OptionTravel.validString(playerCommand))) {
                 if (playerCommand.equalsIgnoreCase(OptionTravel.GO_TO_EAST.toString())) {
-                    Player.getPlayer().getPlayerHero().setCurrentSite(Player.getPlayer().getPlayerHero().getCurrentSite().getEastSite());
+                    getPlayer().getPlayerHero().setCurrentSite(getPlayer().getPlayerHero().getCurrentSite().getEastSite());
                 } else if (playerCommand.equalsIgnoreCase(OptionTravel.GO_TO_NORTH.toString())) {
-                    Player.getPlayer().getPlayerHero().setCurrentSite(Player.getPlayer().getPlayerHero().getCurrentSite().getNorthSite());
+                    getPlayer().getPlayerHero().setCurrentSite(getPlayer().getPlayerHero().getCurrentSite().getNorthSite());
                 } else if (playerCommand.equalsIgnoreCase(OptionTravel.GO_TO_SOUTH.toString())) {
-                    Player.getPlayer().getPlayerHero().setCurrentSite(Player.getPlayer().getPlayerHero().getCurrentSite().getSouthSite());
+                    getPlayer().getPlayerHero().setCurrentSite(getPlayer().getPlayerHero().getCurrentSite().getSouthSite());
                 } else if (playerCommand.equalsIgnoreCase(OptionTravel.GO_TO_WEST.toString())) {
-                    Player.getPlayer().getPlayerHero().setCurrentSite(Player.getPlayer().getPlayerHero().getCurrentSite().getWestSite());
+                    getPlayer().getPlayerHero().setCurrentSite(getPlayer().getPlayerHero().getCurrentSite().getWestSite());
                 }
                 say(String.format(YOU_LOCATE,
-                                                Player.getPlayer().getPlayerHero().getName(),
-                                                Player.getPlayer().getPlayerHero().getCurrentSite().getDescription()));
-                say(Player.getPlayer().getPlayerHero().getCurrentSite().getUnitsDescription());
-                if (Player.getPlayer().getPlayerHero().getCurrentSite().isHaveLiveEnemy()){
-                    if (!Player.getPlayer().getPlayerHero().getCurrentSite().getRandomEnemy().getRace().isBoss()) {
+                                                getPlayer().getPlayerHero().getName(),
+                                                getPlayer().getPlayerHero().getCurrentSite().getDescription()));
+                say(getPlayer().getPlayerHero().getCurrentSite().getUnitsDescription());
+                if (getPlayer().getPlayerHero().getCurrentSite().isHaveLiveEnemy()){
+                    if (!getPlayer().getPlayerHero().getCurrentSite().getRandomEnemy().getRace().isBoss()) {
                         whatToDoWithTheEnemy();
                     } else {
                         whatToDoWithTheBossEnemy();

@@ -28,7 +28,7 @@
     <dependencies>
         <dependency>
             <groupId>com.rozzer.awoi</groupId>
-            <artifactId>awoi-core</artifactId>
+            <artifactId>awoi-entities</artifactId>
             <version>0.0.1</version>
         </dependency>
         <dependency>

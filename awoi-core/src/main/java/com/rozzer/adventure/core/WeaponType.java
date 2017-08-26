@@ -1,6 +1,5 @@
-package com.rozzer.adventure.unit.thing;
+package com.rozzer.adventure.core;
 
-import com.rozzer.adventure.core.Constants;
 
 /**
  * Created by Rozzer on 15.11.2016.

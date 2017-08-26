@@ -1,4 +1,4 @@
-package com.rozzer.adventure;
+package com.rozzer.adventure.core;
 
 import java.util.Random;
 
